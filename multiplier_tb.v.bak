@@ -1,0 +1,102 @@
+`timescale 1ns/1ps
+
+module multiplier_tb;
+
+    // Inputs for Array Multiplier
+    reg [3:0] A;
+    reg [3:0] B;
+
+    // Inputs for Booth Multiplier
+    reg signed [3:0] M;
+    reg signed [3:0] Q;
+
+    // Outputs
+    wire [7:0] array_product;
+    wire signed [7:0] booth_product;
+
+    // Instantiate Array Multiplier
+    array_multiplier_4x4 AM (
+        .A(A),
+        .B(B),
+        .Product(array_product)
+    );
+
+    // Instantiate Booth Multiplier
+    booth_multiplier_4x4 BM (
+        .M(M),
+        .Q(Q),
+        .Product(booth_product)
+    );
+
+    initial begin
+
+        $display("========================================");
+        $display("       4x4 MULTIPLIER TESTBENCH");
+        $display("========================================");
+
+        // Array Multiplier Tests
+
+        A = 4'd3;
+        B = 4'd5;
+        #10;
+        $display("ARRAY : %d x %d = %d",
+                  A, B, array_product);
+
+        A = 4'd7;
+        B = 4'd8;
+        #10;
+        $display("ARRAY : %d x %d = %d",
+                  A, B, array_product);
+
+        A = 4'd10;
+        B = 4'd6;
+        #10;
+        $display("ARRAY : %d x %d = %d",
+                  A, B, array_product);
+
+        A = 4'd15;
+        B = 4'd15;
+        #10;
+        $display("ARRAY : %d x %d = %d",
+                  A, B, array_product);
+
+
+        // Booth Multiplier Tests
+
+        M = 4'sd3;
+        Q = 4'sd5;
+        #10;
+        $display("BOOTH : %d x %d = %d",
+                  M, Q, booth_product);
+
+        M = -4'sd3;
+        Q = 4'sd5;
+        #10;
+        $display("BOOTH : %d x %d = %d",
+                  M, Q, booth_product);
+
+        M = 4'sd4;
+        Q = -4'sd2;
+        #10;
+        $display("BOOTH : %d x %d = %d",
+                  M, Q, booth_product);
+
+        M = -4'sd4;
+        Q = -4'sd2;
+        #10;
+        $display("BOOTH : %d x %d = %d",
+                  M, Q, booth_product);
+
+        M = 4'sd7;
+        Q = 4'sd7;
+        #10;
+        $display("BOOTH : %d x %d = %d",
+                  M, Q, booth_product);
+
+        $display("========================================");
+
+        $finish;
+
+    end
+
+endmodule
